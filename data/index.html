@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+ 
+   <head>
+  <link href="data/style.css" rel="stylesheet" type="text/css">
+       <title>Smart Terrarium</title>
+       
+      <script type = "text/javascript">
+ 
+         var ws = null;
+ 
+         function OpenWebsocket() {
+ 
+               ws = new WebSocket("ws://"+window.location.hostname+"/test");
+ 
+               ws.onopen = function() {
+                    document.getElementById("inputText").disabled = false;
+                    document.getElementById("sendButton").disabled = false;
+                    document.getElementById("connectButton").disabled = true;
+                    document.getElementById("disconnectButton").disabled = false;
+               };
+ 
+               ws.onclose = function() {
+                    document.getElementById("inputText").disabled = true;
+                    document.getElementById("sendButton").disabled = true;
+                    document.getElementById("connectButton").disabled = false;
+                    document.getElementById("disconnectButton").disabled = true;
+ 
+                    alert("Connection closed");
+               };
+         }
+ 
+         function CloseWebsocket(){
+            ws.close();
+         }
+ 
+         function SendDataSlider1(){
+            var textToSend ="T"+ document.getElementById("range1").value ;
+            ws.send(textToSend);
+           
+         }
+            function SendDataSlider2(){
+            var textToSend ="I" +  document.getElementById("range2").value;
+            ws.send(textToSend);
+           
+         }
+             function SendDataBtnON(){
+            var textToSend ="B" ;
+            ws.send(textToSend);
+           
+         }
+ 
+              function SendDataBtnOFF(){
+            var textToSend ="V" ;
+            ws.send(textToSend);
+           
+         }
+      </script>
+
+
+   </head>
+ 
+   <body bgcolor="#DAA520">
+      <p align="center">
+<font size="7" face="Arial" >
+    Smart Terrarium
+          </p>
+      <div align="center">
+         <button onclick = "OpenWebsocket()" id = "connectButton">CONNECT</button>
+         <button onclick = "CloseWebsocket()"  id = "disconnectButton">DISCONNECT</button>
+          </div>
+       
+     <p align="center">
+<font size="3" face="Arial" >
+    Light 
+    <input oninput = "SendDataSlider1()" type="range" id="range1" name="range" min="100" max="355">
+           </p>
+         
+        <p align="center">
+<font size="3" face="Arial" >
+    Temperature
+    <input oninput = "SendDataSlider2()" type="range" id="range2" name="range" min="100" max="355">
+       </p>
+            
+      <p align="center">
+<font size="3" face="Arial" >
+    Door
+    <button onclick = "SendDataBtnON()"  id = "ButtonON">Open</button>
+    <button onclick = "SendDataBtnOFF()"  id = "ButtonOFF">Close</button>      
+     </p>
+          
+   </body>
+</html>
